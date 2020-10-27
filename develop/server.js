@@ -14,8 +14,12 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+mongoose.connect(process.env.ATLAS_URI || "mongodb://localhost/workouts", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
 
+const connection = mongoose.connection;
+connection.once("open", () => {
+  console.log("MongoDB database connected!");
+})
 
 //routes
 app.use(require("./routes/api.js"));
