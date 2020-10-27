@@ -13,14 +13,15 @@ router.get("/api/workouts", (req, res) => {
 });
 
 router.post("api/workouts", ({ body }, res) => {
-  Workout.create(body)
-  .then(({ _id }) => Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
-  .then(results => {
-    res.json(results);
+  const data =req.body;
+  data.date = new Date();
+  const workout = new Workout(data);
+  workout.save().then(() => {
+    res.send(workout);
   })
   .catch(err => {
-    res.json(err);
-  });
+    console.log(err);
+  })
 });
 
 
